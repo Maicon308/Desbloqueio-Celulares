@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Aparelhos e Preços de Desbloqueio</title>
+    {% load static %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Lista de Aparelhos e Preços de Desbloqueio</h1>
+        <div class="row mb-4">
+            <div class="col">
+                <form method="get" action="{% url 'lista_aparelhos' %}">
+                    <div class="form-row align-items-end">
+                        <div class="form-group col-md-5">
+                            <label for="marca">Marca:</label>
+                            <select id="marca" name="marca" class="form-control" onchange="atualizaModelos()">
+                                <option value="">Selecione uma marca</option>
+                                {% for marca in marcas %}
+                                <option value="{{ marca }}">{{ marca }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="modelo">Modelo:</label>
+                            <select id="modelo" name="modelo" class="form-control">
+                                <option value="">Selecione um modelo</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button type="submit" class="btn btn-primary btn-block">Pesquisar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% if aparelhos %}
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Preço de Desbloqueio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for aparelho in aparelhos %}
+                        <tr>
+                            <td>{{ aparelho.marca }}</td>
+                            <td>{{ aparelho.modelo }}</td>
+                            <td>R$ {{ aparelho.preco_desbloqueio }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="text-right">
+                    <button class="btn btn-secondary" onclick="limparLista()">OK</button>
+                </div>
+                {% else %}
+                <p class="text-center">Faça uma pesquisa para ver os resultados.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'scripts.js' %}"></script>
+    <script>
+        function limparLista() {
+            var tabela = document.querySelector("table tbody");
+            tabela.innerHTML = "";
+            // Resetar os selects
+            document.getElementById("marca").value = "";
+            document.getElementById("modelo").innerHTML = "<option value=''>Selecione um modelo</option>";
+            document.querySelector(".text-center").style.display = "block";
+        }
+    </script>
+</body>
+</html>
